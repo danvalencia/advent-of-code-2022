@@ -115,19 +115,31 @@ class Session:
 		return None
 
 	def find_dir_size_by_max_size(self, max_size):
-		return self.dfs(self.file_system.get_root(), max_size)
+		return self.dfs_sum(self.file_system.get_root(), max_size)
 		
-	def dfs(self, node, max_size):
+	def dfs_sum(self, node, max_size):
 		if isinstance(node, Dir):
 			s = 0
 			if node.get_size() <= max_size:
 				s += node.get_size()
 			for n in node.get_children().values():
-				s += self.dfs(n, max_size)
+				s += self.dfs_sum(n, max_size)
 			return s
 
 		return 0
 
+	def find_dir_sizes_with_min_size(self, min_size=8381165):
+		dir_sizes = []
+		self.dfs_find_dirs_with_min_size(self.file_system.get_root(), dir_sizes, min_size)
+		print(str(dir_sizes))
+		return min(dir_sizes)
+
+	def dfs_find_dirs_with_min_size(self, node, dirs, min_size):
+		if isinstance(node, Dir):
+			if node.get_size() >= min_size:
+				dirs.append(node.get_size())
+				for n in node.get_children().values():
+					self.dfs_find_dirs_with_min_size(n, dirs, min_size)
 
 	def create_file(self, file_name, file_size):
 		self.cwd.create_file(file_name, file_size)
@@ -159,7 +171,15 @@ with open(p.Path(__file__).parent.joinpath('input.txt'), 'r') as file:
 			session.mk_dir(dir_name)
 		
 fs.print_fs()
+total_disk_space = 70000000
+min_unused_space_required = 30000000
+total_used_space = fs.get_size() # 41035571
 
-print("Total size: " + str(fs.get_size()))
+total_unused_space = total_disk_space - total_used_space # 28964429
+min_amount_to_free = min_unused_space_required - total_unused_space # 1035571
+
+print("Total size: " + str(total_used_space))
 print("Dir size by max size: " + str(session.find_dir_size_by_max_size(100000)))
+# [41,035,571, 14,733,871, 10,493,602, 9,335,850, 23,329,164, 16,068,117]
+print(str(session.find_dir_sizes_with_min_size(min_amount_to_free))) # 1112963 is the right answer 🥳
 print("CWD: " + str(session.get_cwd()))
