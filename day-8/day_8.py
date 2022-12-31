@@ -1,11 +1,6 @@
 import pathlib
 import functools
 
-grid = """303
-255
-653
-"""
-
 def calc_highest_scenic_score(grid):
 	rows = len(grid)
 	cols = len(grid[0])
@@ -77,31 +72,6 @@ def calc_scenic_score(grid, x, y):
 
 	scenic_score = left_view_dist * right_view_dist * top_view_dist * bottom_view_dist
 	return scenic_score
-
-	# for right_range in range(x + 1, cols):
-	# 	right_tree = grid[y][right_range]
-	# 	if(curr_tree <= right_tree):
-	# 		print("Right tree: " + str(right_tree) + " blocks visibility")
-	# 		results.append(False)
-	# 		break;
-	
-	# for top_range in range(0, y):
-	# 	top_tree = grid[top_range][x]
-	# 	if(curr_tree <= top_tree):
-	# 		print("Top tree: " + str(top_tree) + "; blocks visibility")
-	# 		results.append(False)
-	# 		break;
-
-	# for bottom_range in range(y + 1, rows):
-	# 	bottom_tree = grid[bottom_range][x]
-	# 	if(curr_tree <= bottom_tree):
-	# 		print("Bottom tree: " + str(bottom_tree) + "; blocks visibility")
-	# 		results.append(False)
-	# 		break;
-	
-	# res = len(results) < 4
-	# print("Curr tree(" + str(x) + "," + str(y) + ") = " + str(curr_tree) + "Is visible: " + str(res))
-	# return  res
 
 def is_tree_visible(grid, x, y):
 	rows = len(grid)
